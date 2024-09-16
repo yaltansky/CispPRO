@@ -1,0 +1,5 @@
+DELETE FROM OBJS_TYPES WHERE TYPE IN ('MFWD')
+INSERT INTO OBJS_TYPES(TYPE, NAME, URL, FOLDER_KEYWORD)
+VALUES 
+	('MFWD', 'Сменные задания', '/mfrs/wksheets/details', 'MFWD')
+GO

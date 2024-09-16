@@ -1,0 +1,98 @@
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/16
+          gateway: 172.23.0.1
+          
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports: 
+      - 5672:5672
+      - 15672:15672
+
+  cisp-root:
+    image: ruselprom/cisp-root
+    container_name: cisp-root
+    volumes: 
+      - ./appsettings.json:/app/appsettings.json
+      - /mnt/cispfiles:/appfiles:rw
+    ports:
+      - "8000:9100"
+    restart: always
+      
+  cisp-mfrs:
+    image: ruselprom/cisp-mfrs
+    container_name: cisp-mfrs
+    volumes: 
+      - ./appsettings.json:/app/appsettings.json
+      - /mnt/cispfiles:/appfiles:rw
+    ports:
+      - "9002:9100"
+    restart: always
+      
+  cisp-finance:
+    image: ruselprom/cisp-finance
+    container_name: cisp-finance
+    volumes: 
+      - ./appsettings.json:/app/appsettings.json
+      - /mnt/cispfiles:/appfiles:rw
+    ports:
+      - "9004:9100"
+    restart: always
+
+  cisp-products:
+    image: ruselprom/cisp-products
+    container_name: cisp-products
+    volumes: 
+      - ./appsettings.json:/app/appsettings.json
+      - /mnt/cispfiles:/appfiles:rw
+    ports:
+      - "9003:9100"
+    restart: always
+
+  cisp-proxy:
+    image: ruselprom/cisp-proxy
+    container_name: cisp-proxy
+    volumes: 
+      - /mnt/cispfiles:/appfiles:rw
+    ports:
+      - "80:80"
+    restart: always
+
+  cisp-qbroker:
+    image: ruselprom/cisp-qbroker
+    container_name: cisp-qbroker
+    volumes: 
+      - ./appsettings.json:/app/appsettings.json
+    ports:
+      - "5002:9100"
+    depends_on:
+      - rabbitmq
+    restart: always
+
+  cisp-mail:
+    image: ruselprom/cisp-mail
+    container_name: cisp-mail
+    volumes: 
+      - ./appsettings.json:/app/appsettings.json
+    ports:
+      - "8001:9100"
+    depends_on:
+      - rabbitmq
+    restart: always
+
+#   cisp-exchange:
+#     image: ruselprom/cisp-exchange
+#     container_name: cisp-exchange
+#     volumes: 
+#       - ./appsettings.json:/app/appsettings.json
+#       - /home/projects/Cisp/exchange.prod.json:/app/exchange.json
+#     ports:
+#       - "8002:9100"
+#     depends_on:
+#       - rabbitmq
+#     restart: always
