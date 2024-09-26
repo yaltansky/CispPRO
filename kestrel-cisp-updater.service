@@ -2,8 +2,8 @@
 Description=.NET Web API App 'Cisp.Updater' running on debian
 
 [Service]
-WorkingDirectory=/home/projects/Cisp.Updater/
-ExecStart=/usr/bin/dotnet /home/projects/Cisp.Updater/Cisp.Updater.dll
+WorkingDirectory=/home/projects/CispPro/
+ExecStart=/usr/bin/dotnet /home/projects/CispPro/Cisp.Updater.dll
 Restart=always
 
 [Install]
